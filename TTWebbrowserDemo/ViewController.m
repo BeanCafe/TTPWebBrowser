@@ -20,9 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.reloadView = [[TTPReloadView alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
-    self.reloadView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:self.reloadView];
+//    self.reloadView = [[TTPReloadView alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
+//    self.reloadView.backgroundColor = [UIColor redColor];
+//    [self.view addSubview:self.reloadView];
 
     self.title = @"TTPWebBrowserDemo";
     self.view.backgroundColor = [UIColor whiteColor];
@@ -32,18 +32,18 @@
     [btn addTarget:self action:@selector(refreshAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     
-//    btn.translatesAutoresizingMaskIntoConstraints = NO;
-//    NSLayoutConstraint *centerXConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
-//    [self.view addConstraint:centerXConstraint];
-//
-//    NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
-//    [self.view addConstraint:centerYConstraint];
-//
-//    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80];
-//    [btn addConstraint:widthConstraint];
-//
-//    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:44];
-//    [btn addConstraint:heightConstraint];
+    btn.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint *centerXConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
+    [self.view addConstraint:centerXConstraint];
+
+    NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
+    [self.view addConstraint:centerYConstraint];
+
+    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80];
+    [btn addConstraint:widthConstraint];
+
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:44];
+    [btn addConstraint:heightConstraint];
 
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
 
@@ -56,7 +56,6 @@
 
     [TTPWebbrowser ttp_gotoUrl:@"http://localhost:8082/tianmaomofang" withMainNavigationController:self.navigationController];
 //    [TTPWebbrowser ttp_gotoUrl:@"http://httpbin.org/digest-auth/auth/user/pass" withMainNavigationController:self.navigationController];
-    
 }
 
 - (void)didReceiveMemoryWarning {

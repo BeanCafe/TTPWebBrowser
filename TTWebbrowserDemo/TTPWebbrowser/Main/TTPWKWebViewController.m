@@ -15,12 +15,19 @@
 static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
 
 @interface TTPWKWebViewController ()<WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, BackActionHandlerProtocol>
+//关闭浏览器barItem
 @property(strong, nonatomic)UIBarButtonItem *closeBarItem;
+//导航栏进度条
 @property(strong, nonatomic)TTPWebViewProgressView *progressView;
+//加载失败的重载视图
 @property(strong, nonatomic)TTPReloadView *ttpReloadView;
+//保存当前正在加载的Action
+@property(strong, nonatomic)WKNavigationAction *currentNavigationAction;
 @end
 
 @implementation TTPWKWebViewController
+
+#pragma mark - LifeCircle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -34,7 +41,7 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     //添加进度条
     [self.navigationController.navigationBar addSubview:self.progressView];
     
-    [self tpp_loadUrl:[NSURL URLWithString:self.url]];
+    [self ttp_loadUrl:[NSURL URLWithString:self.url]];
     //界面布局
     [self adjustLayout];
     //调整关闭按钮状态
@@ -62,6 +69,10 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
 
 - (void)setUpBaseView {
     
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
 }
 
 #pragma mark - PrivateMethod
@@ -104,18 +115,42 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     return _ttpWebView;
 }
 
+- (TTPReloadView *)ttpReloadView {
+    if (!_ttpReloadView) {
+        __weak __typeof(self) weakSelf = self;
+        _ttpReloadView = [[TTPReloadView alloc]initWithFrame:CGRectZero reloadHandler:^(id object) {
+            //重新加载网页
+            [weakSelf ttp_reload];
+        }];
+    }
+    return _ttpReloadView;
+}
+
 /**
  通过Request方式加载链接
 
  @param url 链接地址
  */
-- (void)tpp_loadUrl:(NSURL *)url {
+- (void)ttp_loadUrl:(NSURL *)url {
     NSURLRequest *req = [[NSURLRequest alloc]initWithURL:url];
     [self.ttpWebView loadRequest:req];
 }
 
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
+/**
+ 重新加载网页
+ */
+- (void)ttp_reload {
+    //如果网页正在加载中则不进行任何操作
+    if (self.ttpWebView.isLoading) {
+        return;
+    }
+    
+    //由于webView第一次加载失败时会把URL属性值置空, 因此作此处理
+    if (!self.ttpWebView.URL) {
+        [self ttp_loadUrl:self.currentNavigationAction.request.URL];
+    } else {
+        [self.ttpWebView reload];
+    }
 }
 
 /**
@@ -131,12 +166,13 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     } else {
         layOutTargetItem = self.view;
     }
+    //webView顶部距离safeArea为0
     NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.ttpWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:layOutTargetItem attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
     [self.view addConstraint:topConstraint];
-    
+    //webView左侧
     NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem:self.ttpWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0];
     [self.view addConstraint:leftConstraint];
-    
+
     NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:self.ttpWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0];
     [self.view addConstraint:bottomConstraint];
 
@@ -151,6 +187,8 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
  */
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     TTPLog(@"decidePolicyForNavigationAction");
+    TTPLog(@"decidePolicyForNavigationAction: %@", self.ttpWebView.URL);
+    self.currentNavigationAction = navigationAction;
     //更新leftBarItems状态
     [self updateCloseBarButtonItem];
     
@@ -200,7 +238,10 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     TTPLog(@"finished load web!!:%@", self.ttpWebView.backForwardList.currentItem.title);
     TTPLog(@"finished load web!!:%@", self.ttpWebView.backForwardList.backItem.title);
     
+    //更新导航按钮状态
     [self updateCloseBarButtonItem];
+    //网页加载成功回调
+    [self webpageLoadSuccess];
 }
 
 /*
@@ -208,10 +249,12 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
  */
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     TTPLog(@"didFailNavigation:%@", error);
+    [self webpageLoadFailWithError:error];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     TTPLog(@"didFailProvisionalNavigation:%@", error);
+    [self webpageLoadFailWithError:error];
 }
 
 /*
@@ -291,8 +334,8 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
                     NSDictionary *dic = [arr objectAtIndex:i];
                     if (i != 0) {
                         [errorStr appendString:@" "];
-                        [errorStr appendString:(NSString *)dic[@"value"]];
                     }
+                    [errorStr appendString:(NSString *)dic[@"value"]];
                 }
 
                 //获取证书summary
@@ -416,8 +459,21 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     return YES;
 }
 
+/**
+ 网页加载失败统一处理一部分逻辑
+
+ @param error 网页加载报错信息
+ */
 - (void)webpageLoadFailWithError:(NSError *)error {
-    
+    self.ttpReloadView.error = error;
+    [self.ttpReloadView showInView:self.view];
+}
+
+/**
+ 网页加载成功
+ */
+- (void)webpageLoadSuccess {
+    [self.ttpReloadView dissmiss];
 }
 
 #pragma mark - KVO

@@ -10,6 +10,7 @@
 		B431253D2101DD80008F1BD8 /* TTPReloadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B431253C2101DD80008F1BD8 /* TTPReloadView.m */; };
 		B450F03F20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */; };
 		B46A8C8420F6FB18009ABFFC /* TTPWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */; };
+		B46F16662106DA9D00506D72 /* update-arrows.png in Resources */ = {isa = PBXBuildFile; fileRef = B46F16652106DA9D00506D72 /* update-arrows.png */; };
 		B497D17D20EF1AC000A049E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D17C20EF1AC000A049E8 /* AppDelegate.m */; };
 		B497D18020EF1AC000A049E8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D17F20EF1AC000A049E8 /* ViewController.m */; };
 		B497D18520EF1AC000A049E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B497D18420EF1AC000A049E8 /* Assets.xcassets */; };
@@ -51,6 +52,7 @@
 		B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NavigationBackActionHandler.m"; sourceTree = "<group>"; };
 		B46A8C8220F6FB18009ABFFC /* TTPWebViewProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebViewProgressView.h; sourceTree = "<group>"; };
 		B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebViewProgressView.m; sourceTree = "<group>"; };
+		B46F16652106DA9D00506D72 /* update-arrows.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update-arrows.png"; sourceTree = "<group>"; };
 		B497D17820EF1AC000A049E8 /* TTWebbrowserDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TTWebbrowserDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B497D17B20EF1AC000A049E8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B497D17C20EF1AC000A049E8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 		B431253A2101DD4A008F1BD8 /* TTPReloadView */ = {
 			isa = PBXGroup;
 			children = (
+				B46F16652106DA9D00506D72 /* update-arrows.png */,
 				B431253B2101DD80008F1BD8 /* TTPReloadView.h */,
 				B431253C2101DD80008F1BD8 /* TTPReloadView.m */,
 			);
@@ -368,6 +371,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B46F16662106DA9D00506D72 /* update-arrows.png in Resources */,
 				B497D18520EF1AC000A049E8 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
