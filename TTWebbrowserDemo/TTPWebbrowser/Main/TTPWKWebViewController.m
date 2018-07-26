@@ -32,10 +32,8 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.navigationItem.title = @"浏览器";
-    self.navigationItem.backBarButtonItem.title = @"返回";
-    self.navigationItem.leftItemsSupplementBackButton = YES;
-
+    [self setUpViewController];
+    
     //添加webview
     [self.view addSubview:self.ttpWebView];
     //添加进度条
@@ -64,15 +62,12 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
 }
 
 - (void)setUpViewController {
+    self.navigationItem.title = @"浏览器";
+    self.navigationItem.backBarButtonItem.title = @"返回";
+    self.navigationItem.leftItemsSupplementBackButton = YES;
     
-}
-
-- (void)setUpBaseView {
-    
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
+    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreAction:)];
+    self.navigationItem.rightBarButtonItem = moreItem;
 }
 
 #pragma mark - PrivateMethod
@@ -444,6 +439,15 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
  */
 - (void)closeAction:(UIButton *)btn {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+/**
+ 更多操作
+
+ @param item barButtonItem
+ */
+- (void)moreAction:(UIBarButtonItem *)item {
+    
 }
 
 /**
