@@ -51,10 +51,10 @@
 }
 
 - (void)refreshAction:(UIButton *)btn {
-//    [TTPWebbrowser ttp_gotoUrl:@"https://www.baidu.com" withMainNavigationController:self.navigationController];
+    [TTPWebbrowser ttp_gotoUrl:@"https://www.baidu.com" withMainNavigationController:self.navigationController];
 //    [TTPWebbrowser ttp_gotoUrl:@"https://www.cnshihui.cn" withMainNavigationController:self.navigationController];
 
-    [TTPWebbrowser ttp_gotoUrl:@"http://localhost:8082/tianmaomofang" withMainNavigationController:self.navigationController];
+//    [TTPWebbrowser ttp_gotoUrl:@"http://localhost:8082/tianmaomofang" withMainNavigationController:self.navigationController];
 //    [TTPWebbrowser ttp_gotoUrl:@"http://httpbin.org/digest-auth/auth/user/pass" withMainNavigationController:self.navigationController];
 }
 

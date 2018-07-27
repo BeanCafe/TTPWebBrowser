@@ -12,7 +12,8 @@
 #import "TTPWebViewProgressView.h"
 #import "TTPReloadView.h"
 
-static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
+static NSString* const TTPWKWebViewLoadProgressKeyPath = @"estimatedProgress";
+static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
 @interface TTPWKWebViewController ()<WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, BackActionHandlerProtocol>
 //关闭浏览器barItem
@@ -46,7 +47,8 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     [self updateCloseBarButtonItem];
     
     //添加监听进度事件
-    [self.ttpWebView addObserver:self forKeyPath:TTPWKWebViewLoadProgressKey options:NSKeyValueObservingOptionNew||NSKeyValueChangeOldKey context:nil];
+    [self.ttpWebView addObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath options:NSKeyValueObservingOptionNew||NSKeyValueChangeOldKey context:nil];
+    [self.ttpWebView addObserver:self forKeyPath:TTPWKWebViewTitleKeyPath options:NSKeyValueObservingOptionNew||NSKeyValueChangeOldKey context:nil];
 
     // Do any additional setup after loading the view.
 }
@@ -68,6 +70,11 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
     
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreAction:)];
     self.navigationItem.rightBarButtonItem = moreItem;
+}
+
+- (void)dealloc {
+    [self.ttpWebView removeObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath];
+    [self.ttpWebView removeObserver:self forKeyPath:TTPWKWebViewTitleKeyPath];
 }
 
 #pragma mark - PrivateMethod
@@ -447,7 +454,21 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
  @param item barButtonItem
  */
 - (void)moreAction:(UIBarButtonItem *)item {
+    NSString *hostName = [self.currentNavigationAction.request.URL host];
+    NSString *sheetTitle = [NSString stringWithFormat:@"本网页由%@提供", hostName];
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:sheetTitle message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        //刷新网页
+        [self ttp_reload];
+    }]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"复制链接" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //复制链接到剪贴板
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        [pasteboard setString:self.currentNavigationAction.request.URL.absoluteString];
+    }]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    [self presentViewController:actionSheet animated:YES completion:nil];
 }
 
 /**
@@ -493,8 +514,10 @@ static NSString* const TTPWKWebViewLoadProgressKey = @"estimatedProgress";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     CGFloat newValue = [[change valueForKey:NSKeyValueChangeNewKey] floatValue];
 
-    if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewLoadProgressKey]) {
+    if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewLoadProgressKeyPath]) {
         [self.progressView setProgress:newValue animated:YES];
+    } else if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewTitleKeyPath]) {
+        self.navigationItem.title = self.ttpWebView.title;
     }
 }
 
