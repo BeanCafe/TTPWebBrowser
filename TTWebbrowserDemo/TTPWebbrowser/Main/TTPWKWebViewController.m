@@ -24,6 +24,9 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 @property(strong, nonatomic)TTPReloadView *ttpReloadView;
 //保存当前正在加载的Action
 @property(strong, nonatomic)WKNavigationAction *currentNavigationAction;
+
+@property(strong, nonatomic)UILabel *naviTitleLabel;
+@property(strong, nonatomic)UIView *naviItemView;
 @end
 
 @implementation TTPWKWebViewController
@@ -180,6 +183,50 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
     NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem:self.ttpWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0];
     [self.view addConstraint:rightConstraint];
+}
+
+- (void)changeNavigationBarTitle:(NSString *)title {
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.title = title;
+    } else {
+        CGFloat backBarButtonWidth = 65.f;
+        CGFloat closeBarButtonWidth = 0.f;
+        if (self.navigationItem.leftBarButtonItems.count) {
+            closeBarButtonWidth = 44.f;
+        }
+        CGFloat moreButtonButtonWidth = 44.f;
+        CGFloat barButtonGap = 10.f;
+        
+        CGFloat screenSizeWidth = [self.navigationController.navigationBar bounds].size.width;
+        CGFloat titleLabelWidth = screenSizeWidth-backBarButtonWidth-closeBarButtonWidth-moreButtonButtonWidth-barButtonGap*4;
+        NSAttributedString *attributedStr = [[NSAttributedString alloc]initWithString:title attributes:self.navigationController.navigationBar.titleTextAttributes];
+        self.naviTitleLabel.attributedText = attributedStr;
+        self.naviTitleLabel.frame = CGRectMake(0, 0, titleLabelWidth, 21.5);
+        self.naviTitleLabel.center = CGPointMake(closeBarButtonWidth?closeBarButtonWidth/2:0, self.naviTitleLabel.center.y);
+//        [self.naviItemView addSubview:self.naviTitleLabel];
+        
+//        self.navigationItem.titleView = self.naviItemView;
+    }
+}
+
+- (UILabel *)naviTitleLabel {
+    if (!_naviTitleLabel) {
+        _naviTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
+        _naviTitleLabel.textAlignment = NSTextAlignmentCenter;
+        [self.naviItemView addSubview:_naviTitleLabel];
+    }
+    return _naviTitleLabel;
+}
+
+- (UIView *)naviItemView {
+    if (!_naviItemView) {
+        _naviItemView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 21.5)];
+        if (@available(iOS 11.0, *)) {
+        } else {
+            self.navigationItem.titleView = _naviItemView;
+        }
+    }
+    return _naviItemView;
 }
 
 #pragma mark - WkWebviewNaviDelegate
@@ -517,7 +564,10 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewLoadProgressKeyPath]) {
         [self.progressView setProgress:newValue animated:YES];
     } else if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewTitleKeyPath]) {
-        self.navigationItem.title = self.ttpWebView.title;
+//        self.navigationItem.title = self.ttpWebView.title;
+        
+        [self changeNavigationBarTitle:self.ttpWebView.title];
+//        [self changeNavigationBarTitle:@"7777777777777777777777777777777777777777"];
     }
 }
 
