@@ -8,9 +8,12 @@
 
 #import "TTPWKWebViewController.h"
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+
 #import "UIViewController+NavigationBackActionHandler.h"
 #import "TTPWebViewProgressView.h"
 #import "TTPReloadView.h"
+#import "TTPNaviTitleView.h"
 
 static NSString* const TTPWKWebViewLoadProgressKeyPath = @"estimatedProgress";
 static NSString* const TTPWKWebViewTitleKeyPath = @"title";
@@ -25,8 +28,8 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 //保存当前正在加载的Action
 @property(strong, nonatomic)WKNavigationAction *currentNavigationAction;
 
-@property(strong, nonatomic)UILabel *naviTitleLabel;
-@property(strong, nonatomic)UIView *naviItemView;
+//主要用于适配iOS 11以下返回按钮, 在导航栏标题过长时会, 文字会消失的问题
+@property(strong, nonatomic)TTPNaviTitleView *naviTitleView;
 @end
 
 @implementation TTPWKWebViewController
@@ -41,7 +44,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     //添加webview
     [self.view addSubview:self.ttpWebView];
     //添加进度条
-    [self.navigationController.navigationBar addSubview:self.progressView];
+    [self.view addSubview:self.progressView];
     
     [self ttp_loadUrl:[NSURL URLWithString:self.url]];
     //界面布局
@@ -66,6 +69,12 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     [self.navigationController.navigationBar setTranslucent:YES];
 }
 
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.progressView viewDidDisappear];
+}
+
 - (void)setUpViewController {
     self.navigationItem.title = @"浏览器";
     self.navigationItem.backBarButtonItem.title = @"返回";
@@ -76,8 +85,8 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 }
 
 - (void)dealloc {
-    [self.ttpWebView removeObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath];
-    [self.ttpWebView removeObserver:self forKeyPath:TTPWKWebViewTitleKeyPath];
+    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath];
+    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewTitleKeyPath];
 }
 
 #pragma mark - PrivateMethod
@@ -86,7 +95,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     if (!_progressView) {
         CGFloat progressBarHeight = 3.0f;
         CGRect naviBarBounds = self.navigationController.navigationBar.bounds;
-        _progressView = [[TTPWebViewProgressView alloc]initWithFrame:CGRectMake(0, naviBarBounds.size.height, naviBarBounds.size.width, progressBarHeight)];
+        _progressView = [[TTPWebViewProgressView alloc]initWithFrame:CGRectMake(0, 0, naviBarBounds.size.width, progressBarHeight)];
         _progressView.progressBarView.backgroundColor = [UIColor colorWithRed:83.f/255 green:215.f/255 blue:105.f/255 alpha:1.0];
     }
     return _progressView;
@@ -129,6 +138,14 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
         }];
     }
     return _ttpReloadView;
+}
+
+- (TTPNaviTitleView *)naviTitleView {
+    if (!_naviTitleView) {
+        _naviTitleView = [[TTPNaviTitleView alloc]initWithFrame:CGRectMake(0, 0, 1, 21.5)];
+        self.navigationItem.titleView = _naviTitleView;
+    }
+    return _naviTitleView;
 }
 
 /**
@@ -185,48 +202,18 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     [self.view addConstraint:rightConstraint];
 }
 
+/**
+ 更改网页标题
+
+ @param title 标题
+ */
 - (void)changeNavigationBarTitle:(NSString *)title {
+    //主要用于适配iOS 11以下返回按钮, 在导航栏标题过长时会, 文字会消失的问题
     if (@available(iOS 11.0, *)) {
         self.navigationItem.title = title;
     } else {
-        CGFloat backBarButtonWidth = 65.f;
-        CGFloat closeBarButtonWidth = 0.f;
-        if (self.navigationItem.leftBarButtonItems.count) {
-            closeBarButtonWidth = 44.f;
-        }
-        CGFloat moreButtonButtonWidth = 44.f;
-        CGFloat barButtonGap = 10.f;
-        
-        CGFloat screenSizeWidth = [self.navigationController.navigationBar bounds].size.width;
-        CGFloat titleLabelWidth = screenSizeWidth-backBarButtonWidth-closeBarButtonWidth-moreButtonButtonWidth-barButtonGap*4;
-        NSAttributedString *attributedStr = [[NSAttributedString alloc]initWithString:title attributes:self.navigationController.navigationBar.titleTextAttributes];
-        self.naviTitleLabel.attributedText = attributedStr;
-        self.naviTitleLabel.frame = CGRectMake(0, 0, titleLabelWidth, 21.5);
-        self.naviTitleLabel.center = CGPointMake(closeBarButtonWidth?closeBarButtonWidth/2:0, self.naviTitleLabel.center.y);
-//        [self.naviItemView addSubview:self.naviTitleLabel];
-        
-//        self.navigationItem.titleView = self.naviItemView;
+        [self.naviTitleView setNewTitle:title withContainerViewController:self];
     }
-}
-
-- (UILabel *)naviTitleLabel {
-    if (!_naviTitleLabel) {
-        _naviTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 0, 0)];
-        _naviTitleLabel.textAlignment = NSTextAlignmentCenter;
-        [self.naviItemView addSubview:_naviTitleLabel];
-    }
-    return _naviTitleLabel;
-}
-
-- (UIView *)naviItemView {
-    if (!_naviItemView) {
-        _naviItemView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 1, 21.5)];
-        if (@available(iOS 11.0, *)) {
-        } else {
-            self.navigationItem.titleView = _naviItemView;
-        }
-    }
-    return _naviItemView;
 }
 
 #pragma mark - WkWebviewNaviDelegate
@@ -298,10 +285,18 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  */
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
     TTPLog(@"didFailNavigation:%@", error);
+    //处理返回等操作偶现的-999错误
+    if (error.code == NSURLErrorCancelled) {
+        return;
+    }
     [self webpageLoadFailWithError:error];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
+    //处理返回等操作偶现的-999错误
+    if (error.code == NSURLErrorCancelled) {
+        return;
+    }
     TTPLog(@"didFailProvisionalNavigation:%@", error);
     [self webpageLoadFailWithError:error];
 }
@@ -526,6 +521,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 - (BOOL)navigationShouldPopOnBackButton {
     if (self.ttpWebView.canGoBack) {
         [self.ttpWebView goBack];
+        [self updateCloseBarButtonItem];
         return NO;
     }
     return YES;
@@ -564,11 +560,8 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewLoadProgressKeyPath]) {
         [self.progressView setProgress:newValue animated:YES];
     } else if ([object isEqual:self.ttpWebView] && [keyPath isEqualToString:TTPWKWebViewTitleKeyPath]) {
-//        self.navigationItem.title = self.ttpWebView.title;
-        
         [self changeNavigationBarTitle:self.ttpWebView.title];
-//        [self changeNavigationBarTitle:@"7777777777777777777777777777777777777777"];
-    }
+  }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -587,3 +580,5 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 */
 
 @end
+
+#endif

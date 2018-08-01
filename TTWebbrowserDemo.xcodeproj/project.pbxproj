@@ -12,6 +12,7 @@
 		B43A9FCE2109C9C0000DD116 /* more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43A9FCB2109C9C0000DD116 /* more@2x.png */; };
 		B43A9FCF2109C9C0000DD116 /* more@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43A9FCC2109C9C0000DD116 /* more@3x.png */; };
 		B450F03F20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */; };
+		B4593FDE211046AF001D39C4 /* TTPNaviTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4593FDD211046AF001D39C4 /* TTPNaviTitleView.m */; };
 		B46A8C8420F6FB18009ABFFC /* TTPWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */; };
 		B46F16662106DA9D00506D72 /* update-arrows.png in Resources */ = {isa = PBXBuildFile; fileRef = B46F16652106DA9D00506D72 /* update-arrows.png */; };
 		B497D17D20EF1AC000A049E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D17C20EF1AC000A049E8 /* AppDelegate.m */; };
@@ -56,6 +57,8 @@
 		B43A9FCC2109C9C0000DD116 /* more@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more@3x.png"; sourceTree = "<group>"; };
 		B450F03D20F60F24002F073E /* UIViewController+NavigationBackActionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NavigationBackActionHandler.h"; sourceTree = "<group>"; };
 		B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NavigationBackActionHandler.m"; sourceTree = "<group>"; };
+		B4593FDC211046AF001D39C4 /* TTPNaviTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPNaviTitleView.h; sourceTree = "<group>"; };
+		B4593FDD211046AF001D39C4 /* TTPNaviTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPNaviTitleView.m; sourceTree = "<group>"; };
 		B46A8C8220F6FB18009ABFFC /* TTPWebViewProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebViewProgressView.h; sourceTree = "<group>"; };
 		B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebViewProgressView.m; sourceTree = "<group>"; };
 		B46F16652106DA9D00506D72 /* update-arrows.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update-arrows.png"; sourceTree = "<group>"; };
@@ -137,6 +140,15 @@
 				B415031220FC4D65007B9728 /* TTPMacros.h */,
 			);
 			path = Tools;
+			sourceTree = "<group>";
+		};
+		B4593FDB21104686001D39C4 /* TTPNaviTitleView */ = {
+			isa = PBXGroup;
+			children = (
+				B4593FDC211046AF001D39C4 /* TTPNaviTitleView.h */,
+				B4593FDD211046AF001D39C4 /* TTPNaviTitleView.m */,
+			);
+			path = TTPNaviTitleView;
 			sourceTree = "<group>";
 		};
 		B45DA02920F45BBA0067E65D /* resources */ = {
@@ -227,6 +239,7 @@
 		B497D1B020EF1B0E00A049E8 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				B4593FDB21104686001D39C4 /* TTPNaviTitleView */,
 				B431253A2101DD4A008F1BD8 /* TTPReloadView */,
 				B497D1C220EF513C00A049E8 /* TTPProgressView */,
 				B497D1BA20EF218800A049E8 /* TTPWebViewController.h */,
@@ -413,6 +426,7 @@
 				B497D1BC20EF218800A049E8 /* TTPWebViewController.m in Sources */,
 				B497D1B320EF1D1C00A049E8 /* TTPBaseNavitionViewController.m in Sources */,
 				B497D18020EF1AC000A049E8 /* ViewController.m in Sources */,
+				B4593FDE211046AF001D39C4 /* TTPNaviTitleView.m in Sources */,
 				B497D1C120EF4B1C00A049E8 /* TTPWKWebViewController.m in Sources */,
 				B497D18B20EF1AC000A049E8 /* main.m in Sources */,
 				B431253D2101DD80008F1BD8 /* TTPReloadView.m in Sources */,

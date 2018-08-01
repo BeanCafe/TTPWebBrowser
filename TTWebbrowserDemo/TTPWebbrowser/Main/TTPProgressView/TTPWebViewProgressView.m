@@ -54,6 +54,10 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
     _fadeOutDelay = 0.1f;
 }
 
+- (void)viewDidDisappear {
+    [self.progressAutoGrowTimer invalidate];
+}
+
 #pragma mark - 进度/进度条增长动画
 
 - (void)setProgress:(float)progress
