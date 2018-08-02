@@ -67,11 +67,8 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
 
 - (void)setProgress:(float)progress animated:(BOOL)animated
 {
-    TTPLog(@"setProgress animated _progress:%f", _progress);
-    TTPLog(@"setProgress animated progress:%f", progress);
     //对progress进行赋值
     _progress = (progress>_progress)?progress:_progress;
-    TTPLog(@"setProgress animated _progress:%f", _progress);
     
     [self progressAutoGrowTimerStartUp];
     
@@ -117,7 +114,6 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
  定时器自动增长进度循环方法
  */
 - (void)progressAutoGrowAction {
-    TTPLog(@"GrowAction _progress:%f", self.progress);
     //进度完成时定时器暂停
     if (self.progress>=1.0f) {
         [self progressAutoGrowTimerTurnDown];

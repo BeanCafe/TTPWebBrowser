@@ -8,16 +8,34 @@
 
 #import "TTPNaviTitleView.h"
 
+@interface TTPNaviTitleView()
+//弱引用titleView所在控制器, 不进行持有
+@property(weak, nonatomic)UIViewController *currentViewController;
+
+@property (strong, nonatomic)UILabel *titleLabel;
+@end
+
 @implementation TTPNaviTitleView
+
+#pragma mark - LifeCircle
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.titleLabel];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveDeviceOrientationDidChangeNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
     }
     return self;
 }
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Setter
 
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
@@ -27,7 +45,30 @@
     return _titleLabel;
 }
 
+#pragma mark - PrivateMethod
+
+/**
+ 收到屏幕旋转的通知
+
+ @param notification 通知实例
+ */
+- (void)didReceiveDeviceOrientationDidChangeNotification:(NSNotification *)notification {
+    //重新走一遍设置标题的逻辑, 传入当前的viewController
+    [self setNewTitle:self.titleLabel.attributedText.string withContainerViewController:self.currentViewController];
+}
+
+#pragma mark - PublicMethod
+
+/**
+ 给titleView设置新的标题, 会自动调整title的宽度, titleLabel的宽度等于导航栏宽度减去返回按钮的宽度, 更多按钮的宽度
+ 关闭按钮的宽度(如果有), 在减去按钮之间的距离
+ 
+ @param title 标题
+ @param viewController titleView所在的viewController
+ */
 - (void)setNewTitle:(NSString *)title withContainerViewController:(UIViewController *)viewController {
+    self.currentViewController = viewController;
+    
     //查阅分析得出各个控件宽度
     //返回按钮, 返回按钮+返回图标宽度
     CGFloat backBarButtonWidth = 65.f;

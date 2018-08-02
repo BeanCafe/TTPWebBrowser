@@ -75,6 +75,11 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     [self.progressView viewDidDisappear];
 }
 
+- (void)dealloc {
+    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath];
+    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewTitleKeyPath];
+}
+
 - (void)setUpViewController {
     self.navigationItem.title = @"浏览器";
     self.navigationItem.backBarButtonItem.title = @"返回";
@@ -84,12 +89,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     self.navigationItem.rightBarButtonItem = moreItem;
 }
 
-- (void)dealloc {
-    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath];
-    [_ttpWebView removeObserver:self forKeyPath:TTPWKWebViewTitleKeyPath];
-}
-
-#pragma mark - PrivateMethod
+#pragma mark - Setters
 
 - (TTPWebViewProgressView *)progressView {
     if (!_progressView) {
@@ -110,7 +110,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
 /**
  初始化WebView
-
+ 
  @return WKWebView
  */
 - (WKWebView *)ttpWebView {
@@ -148,6 +148,9 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     return _naviTitleView;
 }
 
+#pragma mark - PublicMethod
+
+
 /**
  通过Request方式加载链接
 
@@ -174,6 +177,8 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
         [self.ttpWebView reload];
     }
 }
+
+#pragma mark - PrivateMethod
 
 /**
  调整UI布局
@@ -208,6 +213,11 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  @param title 标题
  */
 - (void)changeNavigationBarTitle:(NSString *)title {
+    //title为空时显示loading
+    if (!title.length) {
+        title = @"Loading..";
+    }
+    
     //主要用于适配iOS 11以下返回按钮, 在导航栏标题过长时会, 文字会消失的问题
     if (@available(iOS 11.0, *)) {
         self.navigationItem.title = title;

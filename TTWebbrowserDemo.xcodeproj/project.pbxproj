@@ -26,8 +26,6 @@
 		B497D1B920EF1D5400A049E8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B497D1B820EF1D5400A049E8 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		B497D1BC20EF218800A049E8 /* TTPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1BB20EF218800A049E8 /* TTPWebViewController.m */; };
 		B497D1C120EF4B1C00A049E8 /* TTPWKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1C020EF4B1C00A049E8 /* TTPWKWebViewController.m */; };
-		B497D1CA20EF613100A049E8 /* NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1C620EF613100A049E8 /* NJKWebViewProgress.m */; };
-		B497D1CB20EF613100A049E8 /* NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1C820EF613100A049E8 /* NJKWebViewProgressView.m */; };
 		B497D1CE20EF71B000A049E8 /* TTPWebbrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1CD20EF71B000A049E8 /* TTPWebbrowser.m */; };
 /* End PBXBuildFile section */
 
@@ -85,10 +83,6 @@
 		B497D1BB20EF218800A049E8 /* TTPWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebViewController.m; sourceTree = "<group>"; };
 		B497D1BF20EF4B1C00A049E8 /* TTPWKWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWKWebViewController.h; sourceTree = "<group>"; };
 		B497D1C020EF4B1C00A049E8 /* TTPWKWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWKWebViewController.m; sourceTree = "<group>"; };
-		B497D1C620EF613100A049E8 /* NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgress.m; sourceTree = "<group>"; };
-		B497D1C720EF613100A049E8 /* NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgressView.h; sourceTree = "<group>"; };
-		B497D1C820EF613100A049E8 /* NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NJKWebViewProgressView.m; sourceTree = "<group>"; };
-		B497D1C920EF613100A049E8 /* NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NJKWebViewProgress.h; sourceTree = "<group>"; };
 		B497D1CC20EF71B000A049E8 /* TTPWebbrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebbrowser.h; sourceTree = "<group>"; };
 		B497D1CD20EF71B000A049E8 /* TTPWebbrowser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebbrowser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -277,10 +271,6 @@
 		B497D1C220EF513C00A049E8 /* TTPProgressView */ = {
 			isa = PBXGroup;
 			children = (
-				B497D1C920EF613100A049E8 /* NJKWebViewProgress.h */,
-				B497D1C620EF613100A049E8 /* NJKWebViewProgress.m */,
-				B497D1C720EF613100A049E8 /* NJKWebViewProgressView.h */,
-				B497D1C820EF613100A049E8 /* NJKWebViewProgressView.m */,
 				B46A8C8220F6FB18009ABFFC /* TTPWebViewProgressView.h */,
 				B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */,
 			);
@@ -422,7 +412,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B497D1CA20EF613100A049E8 /* NJKWebViewProgress.m in Sources */,
 				B497D1BC20EF218800A049E8 /* TTPWebViewController.m in Sources */,
 				B497D1B320EF1D1C00A049E8 /* TTPBaseNavitionViewController.m in Sources */,
 				B497D18020EF1AC000A049E8 /* ViewController.m in Sources */,
@@ -433,7 +422,6 @@
 				B497D1CE20EF71B000A049E8 /* TTPWebbrowser.m in Sources */,
 				B497D1B620EF1D3200A049E8 /* TTPBaseViewController.m in Sources */,
 				B46A8C8420F6FB18009ABFFC /* TTPWebViewProgressView.m in Sources */,
-				B497D1CB20EF613100A049E8 /* NJKWebViewProgressView.m in Sources */,
 				B450F03F20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m in Sources */,
 				B497D17D20EF1AC000A049E8 /* AppDelegate.m in Sources */,
 			);
