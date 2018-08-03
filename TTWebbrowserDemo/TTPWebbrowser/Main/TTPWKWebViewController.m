@@ -54,6 +54,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     
     //添加监听进度事件
     [self.ttpWebView addObserver:self forKeyPath:TTPWKWebViewLoadProgressKeyPath options:NSKeyValueObservingOptionNew||NSKeyValueChangeOldKey context:nil];
+    //监听页面标题变化
     [self.ttpWebView addObserver:self forKeyPath:TTPWKWebViewTitleKeyPath options:NSKeyValueObservingOptionNew||NSKeyValueChangeOldKey context:nil];
 
     // Do any additional setup after loading the view.
@@ -89,7 +90,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     self.navigationItem.rightBarButtonItem = moreItem;
 }
 
-#pragma mark - Setters
+#pragma mark - Getters
 
 - (TTPWebViewProgressView *)progressView {
     if (!_progressView) {
@@ -178,6 +179,31 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     }
 }
 
++ (void)clearWebCacheCompletion:(dispatch_block_t)completion {
+    if (@available(iOS 9.0, *)) {
+        NSSet *websiteDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
+        NSDate *dateFrom = [NSDate dateWithTimeIntervalSince1970:0];
+        [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:websiteDataTypes modifiedSince:dateFrom completionHandler:completion];
+    } else {
+        NSString *libraryDir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
+        NSString *bundleId  =  [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+        NSString *webkitFolderInLib = [NSString stringWithFormat:@"%@/WebKit",libraryDir];
+        NSString *webKitFolderInCaches = [NSString stringWithFormat:@"%@/Caches/%@/WebKit",libraryDir,bundleId];
+        NSString *webKitFolderInCachesfs = [NSString stringWithFormat:@"%@/Caches/%@/fsCachedData",libraryDir,bundleId];
+        
+        NSError *error;
+        /* iOS8.0 WebView Cache path */
+        [[NSFileManager defaultManager] removeItemAtPath:webKitFolderInCaches error:&error];
+        [[NSFileManager defaultManager] removeItemAtPath:webkitFolderInLib error:nil];
+        
+        /* iOS7.0 WebView Cache path */
+        [[NSFileManager defaultManager] removeItemAtPath:webKitFolderInCachesfs error:&error];
+        if (completion) {
+            completion();
+        }
+    }
+}
+
 #pragma mark - PrivateMethod
 
 /**
@@ -232,8 +258,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  * 载入网页流程第一步 - 是否允许开始下载网页资源
  */
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    TTPLog(@"decidePolicyForNavigationAction");
-    TTPLog(@"decidePolicyForNavigationAction: %@", self.ttpWebView.URL);
+    TTPLog(@"Start Request Url %@", self.ttpWebView.URL);
     self.currentNavigationAction = navigationAction;
     //更新leftBarItems状态
     [self updateCloseBarButtonItem];
@@ -259,7 +284,6 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
-    TTPLog(@"decidePolicyForNavigationResponse");
     //允许加载网页
     decisionHandler(WKNavigationResponsePolicyAllow);
 }
@@ -268,21 +292,17 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  * 载入网页流程第二步 - 网页已经开始下载网页资源回调
  */
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    TTPLog(@"did start load web!");
-    TTPLog(@"did start load web!:%@", self.ttpWebView.backForwardList.currentItem.title);
+    TTPLog(@"Did Start Load Web Content!");
 }
 
 - (void)webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
-    TTPLog(@"didCommitNavigation");
 }
 
 /*
  * 载入网页流程第三步 - 网页已下载完网页资源并加载完毕
  */
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    TTPLog(@"finished load web!");
-    TTPLog(@"finished load web!!:%@", self.ttpWebView.backForwardList.currentItem.title);
-    TTPLog(@"finished load web!!:%@", self.ttpWebView.backForwardList.backItem.title);
+    TTPLog(@"Finished Load Web!!:%@", self.ttpWebView.backForwardList.currentItem.title);
     
     //更新导航按钮状态
     [self updateCloseBarButtonItem];
@@ -315,7 +335,6 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  * 载入网页收到挑战应答机制
  */
 - (void)webView:(WKWebView *)webView didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler {
-    TTPLog(@"didReceiveAuthenticationChallenge");
     //获取网页域名
     NSString *hostStr = webView.URL.host;
     
@@ -510,7 +529,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     NSString *sheetTitle = [NSString stringWithFormat:@"本网页由%@提供", hostName];
     UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:sheetTitle message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [actionSheet addAction:[UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         //刷新网页
         [self ttp_reload];
     }]];
@@ -518,6 +537,13 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
         //复制链接到剪贴板
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         [pasteboard setString:self.currentNavigationAction.request.URL.absoluteString];
+#warning - Toast提示用户复制成功
+    }]];
+    [actionSheet addAction:[UIAlertAction actionWithTitle:@"清除缓存" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [[self class] clearWebCacheCompletion:^{
+#warning - Toast提示用户缓存清除状态
+            TTPLog(@"清除完成");
+        }];
     }]];
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:actionSheet animated:YES completion:nil];

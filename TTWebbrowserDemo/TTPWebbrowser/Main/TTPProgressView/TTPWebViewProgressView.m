@@ -65,13 +65,27 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
     [self setProgress:progress animated:NO];
 }
 
+/**
+ 更新进度条进度
+ 内部与外部均调用此方法动态更新进度条的进度
+
+ @param progress 新的进度
+ @param animated 是否动画增长
+ */
 - (void)setProgress:(float)progress animated:(BOOL)animated
 {
     //对progress进行赋值
     _progress = (progress>_progress)?progress:_progress;
     
+    /*
+     * 定时器启动
+     * 内部与外部均调用此方法动态更新进度条的进度
+     * 因此只要调用此方法定时器都会默认启动, 自动增加进度条的进度, 直到增长1.0
+     * 定时器启动与关闭方法以增加判断方法, 判断定时器是否已经开启
+     */
     [self progressAutoGrowTimerStartUp];
     
+    //更新进度条进度
     BOOL isGrowing = _progress > 0.0;
     [UIView animateWithDuration:(isGrowing && animated) ? _barAnimationDuration : 0.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         CGRect frame = _progressBarView.frame;
@@ -79,6 +93,7 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
         _progressBarView.frame = frame;
     } completion:nil];
     
+    //如果进度大于1.0则直接隐藏进度条
     if (_progress >= 1.0) {
         [UIView animateWithDuration:animated ? _fadeAnimationDuration : 0.0 delay:_fadeOutDelay options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _progressBarView.alpha = 0.0;
@@ -88,6 +103,7 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
             _progressBarView.frame = frame;
         }];
     }
+    //如果进度小于1.0则更新进度
     else {
         [UIView animateWithDuration:animated ? _fadeAnimationDuration : 0.0 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             _progressBarView.alpha = 1.0;
@@ -142,7 +158,7 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
  */
 - (void)progressAutoGrowTimerStartUp {
     if (self.isAutoProcessing) {
-        TTPLog(@"定时器已经启动!");
+//        TTPLog(@"定时器已经启动!");
         return;
     }
     
@@ -157,7 +173,7 @@ static CGFloat const TTPWebProgressAutoGrowSpeedLow = 0.000002f;
  */
 - (void)progressAutoGrowTimerTurnDown {
     if (!self.isAutoProcessing) {
-        TTPLog(@"定时器已经关闭");
+//        TTPLog(@"定时器已经关闭");
         return;
     }
     

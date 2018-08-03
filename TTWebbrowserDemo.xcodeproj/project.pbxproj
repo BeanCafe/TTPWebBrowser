@@ -24,7 +24,6 @@
 		B497D1B320EF1D1C00A049E8 /* TTPBaseNavitionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1B220EF1D1C00A049E8 /* TTPBaseNavitionViewController.m */; };
 		B497D1B620EF1D3200A049E8 /* TTPBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1B520EF1D3200A049E8 /* TTPBaseViewController.m */; };
 		B497D1B920EF1D5400A049E8 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B497D1B820EF1D5400A049E8 /* WebKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		B497D1BC20EF218800A049E8 /* TTPWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1BB20EF218800A049E8 /* TTPWebViewController.m */; };
 		B497D1C120EF4B1C00A049E8 /* TTPWKWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1C020EF4B1C00A049E8 /* TTPWKWebViewController.m */; };
 		B497D1CE20EF71B000A049E8 /* TTPWebbrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D1CD20EF71B000A049E8 /* TTPWebbrowser.m */; };
 /* End PBXBuildFile section */
@@ -79,8 +78,6 @@
 		B497D1B420EF1D3200A049E8 /* TTPBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPBaseViewController.h; sourceTree = "<group>"; };
 		B497D1B520EF1D3200A049E8 /* TTPBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPBaseViewController.m; sourceTree = "<group>"; };
 		B497D1B820EF1D5400A049E8 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		B497D1BA20EF218800A049E8 /* TTPWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebViewController.h; sourceTree = "<group>"; };
-		B497D1BB20EF218800A049E8 /* TTPWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebViewController.m; sourceTree = "<group>"; };
 		B497D1BF20EF4B1C00A049E8 /* TTPWKWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWKWebViewController.h; sourceTree = "<group>"; };
 		B497D1C020EF4B1C00A049E8 /* TTPWKWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWKWebViewController.m; sourceTree = "<group>"; };
 		B497D1CC20EF71B000A049E8 /* TTPWebbrowser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebbrowser.h; sourceTree = "<group>"; };
@@ -116,10 +113,6 @@
 		B431253A2101DD4A008F1BD8 /* TTPReloadView */ = {
 			isa = PBXGroup;
 			children = (
-				B43A9FCA2109C9C0000DD116 /* more.png */,
-				B43A9FCB2109C9C0000DD116 /* more@2x.png */,
-				B43A9FCC2109C9C0000DD116 /* more@3x.png */,
-				B46F16652106DA9D00506D72 /* update-arrows.png */,
 				B431253B2101DD80008F1BD8 /* TTPReloadView.h */,
 				B431253C2101DD80008F1BD8 /* TTPReloadView.m */,
 			);
@@ -148,6 +141,10 @@
 		B45DA02920F45BBA0067E65D /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				B43A9FCA2109C9C0000DD116 /* more.png */,
+				B43A9FCB2109C9C0000DD116 /* more@2x.png */,
+				B43A9FCC2109C9C0000DD116 /* more@3x.png */,
+				B46F16652106DA9D00506D72 /* update-arrows.png */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -236,8 +233,6 @@
 				B4593FDB21104686001D39C4 /* TTPNaviTitleView */,
 				B431253A2101DD4A008F1BD8 /* TTPReloadView */,
 				B497D1C220EF513C00A049E8 /* TTPProgressView */,
-				B497D1BA20EF218800A049E8 /* TTPWebViewController.h */,
-				B497D1BB20EF218800A049E8 /* TTPWebViewController.m */,
 				B497D1BF20EF4B1C00A049E8 /* TTPWKWebViewController.h */,
 				B497D1C020EF4B1C00A049E8 /* TTPWKWebViewController.m */,
 			);
@@ -412,7 +407,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B497D1BC20EF218800A049E8 /* TTPWebViewController.m in Sources */,
 				B497D1B320EF1D1C00A049E8 /* TTPBaseNavitionViewController.m in Sources */,
 				B497D18020EF1AC000A049E8 /* ViewController.m in Sources */,
 				B4593FDE211046AF001D39C4 /* TTPNaviTitleView.m in Sources */,
