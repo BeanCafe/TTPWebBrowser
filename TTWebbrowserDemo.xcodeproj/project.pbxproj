@@ -208,7 +208,6 @@
 			children = (
 				B450F03C20F60EE6002F073E /* Tools */,
 				B45DA02920F45BBA0067E65D /* resources */,
-				B497D1BE20EF221E00A049E8 /* Config */,
 				B497D1BD20EF219800A049E8 /* Navi */,
 				B497D1B020EF1B0E00A049E8 /* Main */,
 				B497D1AE20EF1B0000A049E8 /* Base */,
@@ -254,13 +253,6 @@
 				B497D1CD20EF71B000A049E8 /* TTPWebbrowser.m */,
 			);
 			path = Navi;
-			sourceTree = "<group>";
-		};
-		B497D1BE20EF221E00A049E8 /* Config */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Config;
 			sourceTree = "<group>";
 		};
 		B497D1C220EF513C00A049E8 /* TTPProgressView */ = {

@@ -18,7 +18,12 @@
 static NSString* const TTPWKWebViewLoadProgressKeyPath = @"estimatedProgress";
 static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
-@interface TTPWKWebViewController ()<WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, BackActionHandlerProtocol>
+@interface TTPWKWebViewController ()<WKUIDelegate, WKScriptMessageHandler, WKNavigationDelegate, BackActionHandlerProtocol> {
+    WKWebViewConfiguration *_configuration;
+    NSURLRequest *_request;
+    NSString *_HTMLString;
+    NSURL *_baseURL;
+}
 //关闭浏览器barItem
 @property(strong, nonatomic)UIBarButtonItem *closeBarItem;
 //导航栏进度条
@@ -28,7 +33,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 //保存当前正在加载的Action
 @property(strong, nonatomic)WKNavigationAction *currentNavigationAction;
 
-//主要用于适配iOS 11以下返回按钮, 在导航栏标题过长时会, 文字会消失的问题
+//主要用于适配iOS 11以下, 在导航栏标题过长时会, 返回按钮文字会消失的问题
 @property(strong, nonatomic)TTPNaviTitleView *naviTitleView;
 @end
 
@@ -36,17 +41,73 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
 #pragma mark - LifeCircle
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self setUpViewController];
+    }
+    return self;
+}
+
+- (instancetype)initWithURL:(NSURL *)URL {
+    self = [self init];
+    if (self) {
+        _URL = URL;
+    }
+    return self;
+}
+
+- (instancetype)initWithRequest:(NSURLRequest *)request {
+    self = [self init];
+    if (self) {
+        _request = request;
+    }
+    return self;
+}
+
+- (instancetype)initWithHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL {
+    self = [self init];
+    if (self) {
+        _HTMLString = HTMLString;
+        _baseURL = baseURL;
+    }
+    return self;
+}
+
+- (instancetype)initWithURL:(NSURL *)URL configuration:(WKWebViewConfiguration *)configuration {
+    if (self = [self initWithURL:URL]) {
+        _configuration = configuration;
+    }
+    return self;
+}
+
+- (instancetype)initWithRequest:(NSURLRequest *)request configuration:(WKWebViewConfiguration *)configuration {
+    if (self = [self initWithRequest:request]) {
+        _request = request;
+        _configuration = configuration;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self setUpViewController];
     
     //添加webview
     [self.view addSubview:self.ttpWebView];
     //添加进度条
     [self.view addSubview:self.progressView];
     
-    [self ttp_loadUrl:[NSURL URLWithString:self.url]];
+    if (_request) {
+        [self loadURLRequest:_request];
+    } else if (_URL) {
+        [self loadURL:_URL];
+    } else if (/*_baseURL && */_HTMLString) {
+        [self loadHTMLString:_HTMLString baseURL:_baseURL];
+    } else {
+        // Handle none resource case.
+//        [self loadURL:[NSURL fileURLWithPath:kAX404NotFoundHTMLPath]];
+    }
     //界面布局
     [self adjustLayout];
     //调整关闭按钮状态
@@ -86,6 +147,15 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     self.navigationItem.backBarButtonItem.title = @"返回";
     self.navigationItem.leftItemsSupplementBackButton = YES;
     
+    _timeoutInternal = 30.0;
+    _cachePolicy = NSURLRequestReloadRevalidatingCacheData;
+    
+    //UserContent控制器
+    WKUserContentController *ttpUsrContentContoller = [[WKUserContentController alloc]init];
+    //WebView config
+    _configuration = [[WKWebViewConfiguration alloc]init];
+    _configuration.userContentController = ttpUsrContentContoller;
+
     UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreAction:)];
     self.navigationItem.rightBarButtonItem = moreItem;
 }
@@ -116,13 +186,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
  */
 - (WKWebView *)ttpWebView {
     if (!_ttpWebView) {
-        //UserContent控制器
-        WKUserContentController *ttpUsrContentContoller = [[WKUserContentController alloc]init];
-        //WebView config
-        WKWebViewConfiguration *ttpConfig = [[WKWebViewConfiguration alloc]init];
-        ttpConfig.userContentController = ttpUsrContentContoller;
-        
-        _ttpWebView = [[WKWebView alloc]initWithFrame:CGRectZero configuration:ttpConfig];
+        _ttpWebView = [[WKWebView alloc]initWithFrame:CGRectZero configuration:_configuration];
         _ttpWebView.UIDelegate = self;
         _ttpWebView.navigationDelegate = self;
         _ttpWebView.allowsBackForwardNavigationGestures = YES;
@@ -151,17 +215,6 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 
 #pragma mark - PublicMethod
 
-
-/**
- 通过Request方式加载链接
-
- @param url 链接地址
- */
-- (void)ttp_loadUrl:(NSURL *)url {
-    NSURLRequest *req = [[NSURLRequest alloc]initWithURL:url];
-    [self.ttpWebView loadRequest:req];
-}
-
 /**
  重新加载网页
  */
@@ -173,12 +226,35 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     
     //由于webView第一次加载失败时会把URL属性值置空, 因此作此处理
     if (!self.ttpWebView.URL) {
-        [self ttp_loadUrl:self.currentNavigationAction.request.URL];
+        [self loadURL:self.currentNavigationAction.request.URL];
     } else {
         [self.ttpWebView reload];
     }
 }
 
+- (void)loadURL:(NSURL *)pageURL {
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:pageURL];
+    request.timeoutInterval = _timeoutInternal;
+    request.cachePolicy = _cachePolicy;
+    [_ttpWebView loadRequest:request];
+}
+
+- (void)loadURLRequest:(NSURLRequest *)request {
+    NSMutableURLRequest *aRequest = [request mutableCopy];
+    [_ttpWebView loadRequest:aRequest];
+}
+
+- (void)loadHTMLString:(NSString *)HTMLString baseURL:(NSURL *)baseURL {
+    _baseURL = baseURL;
+    _HTMLString = HTMLString;
+    [_ttpWebView loadHTMLString:HTMLString baseURL:baseURL];
+}
+
+/**
+ 清除缓存
+
+ @param completion 清除完成回调
+ */
 + (void)clearWebCacheCompletion:(dispatch_block_t)completion {
     if (@available(iOS 9.0, *)) {
         NSSet *websiteDataTypes = [WKWebsiteDataStore allWebsiteDataTypes];
@@ -527,8 +603,8 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
 - (void)moreAction:(UIBarButtonItem *)item {
     NSString *hostName = [self.currentNavigationAction.request.URL host];
     NSString *sheetTitle = [NSString stringWithFormat:@"本网页由%@提供", hostName];
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:sheetTitle message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:sheetTitle message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     [actionSheet addAction:[UIAlertAction actionWithTitle:@"刷新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         //刷新网页
         [self ttp_reload];

@@ -26,7 +26,7 @@
 - (void)setProgress:(float)progress animated:(BOOL)animated;
 
 /**
- 外部Vc确实不在屏幕时, 需要调用此方法, 此方法会将定时器进行无效化处理
+ 外部Vc view确实不在屏幕时, 需要调用此方法, 此方法会将定时器进行无效化处理
  */
 - (void)viewDidDisappear;
 

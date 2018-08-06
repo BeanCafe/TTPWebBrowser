@@ -8,7 +8,6 @@
 
 #import "TTPWebbrowser.h"
 #import "TTPWKWebViewController.h"
-#import "TTPWebViewController.h"
 #import "TTPBaseNavitionViewController.h"
 
 @implementation TTPWebbrowser
@@ -25,8 +24,7 @@
 + (void)ttp_gotoUrl:(NSString *)url withMainNavigationController:(UINavigationController *)navigationController{
     TTPWebbrowser *browser = [[TTPWebbrowser alloc]init];
     
-    TTPWKWebViewController *ttpWk = [[TTPWKWebViewController alloc]init];
-    ttpWk.url = url;
+    TTPWKWebViewController *ttpWk = [[TTPWKWebViewController alloc]initWithURL:[NSURL URLWithString:url]];
     [navigationController pushViewController:ttpWk animated:YES];
 }
 
