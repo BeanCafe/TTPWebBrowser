@@ -101,7 +101,7 @@
     if (!_reloadIconImageView) {
         _reloadIconImageView = [[UIImageView alloc]init];
         _reloadIconImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [_reloadIconImageView setImage:[UIImage imageNamed:@"update-arrows"]];
+        [_reloadIconImageView setImage:[UIImage imageNamed:@"ttpbrowser_update-arrows"]];
     }
     return _reloadIconImageView;
 }

@@ -156,7 +156,7 @@ static NSString* const TTPWKWebViewTitleKeyPath = @"title";
     _configuration = [[WKWebViewConfiguration alloc]init];
     _configuration.userContentController = ttpUsrContentContoller;
 
-    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreAction:)];
+    UIBarButtonItem *moreItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"ttpbrowser_more"] style:UIBarButtonItemStylePlain target:self action:@selector(moreAction:)];
     self.navigationItem.rightBarButtonItem = moreItem;
 }
 

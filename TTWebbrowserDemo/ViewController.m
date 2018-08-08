@@ -11,6 +11,8 @@
 #import "TTPWebbrowser.h"
 #import "TTPReloadView.h"
 
+#import "TTPMacros.h"
+
 @interface ViewController ()
 @property(strong, nonatomic)TTPReloadView *reloadView;
 @end
@@ -19,6 +21,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
     
 //    self.reloadView = [[TTPReloadView alloc]initWithFrame:CGRectMake(0, 0, 300, 200)];
 //    self.reloadView.backgroundColor = [UIColor redColor];
@@ -51,11 +55,19 @@
 }
 
 - (void)refreshAction:(UIButton *)btn {
-    [TTPWebbrowser ttp_gotoUrl:@"https://www.baidu.com" withMainNavigationController:self.navigationController];
+//    [TTPWebbrowser ttp_gotoUrl:@"https://www.baidu.com" withMainNavigationController:self.navigationController];
 //    [TTPWebbrowser ttp_gotoUrl:@"https://www.cnshihui.cn" withMainNavigationController:self.navigationController];
 
 //    [TTPWebbrowser ttp_gotoUrl:@"http://localhost:8082/tianmaomofang" withMainNavigationController:self.navigationController];
 //    [TTPWebbrowser ttp_gotoUrl:@"http://httpbin.org/digest-auth/auth/user/pass" withMainNavigationController:self.navigationController];
+    
+    NSString *privateBundlePath = [[NSBundle mainBundle]pathForResource:@"TTPWebbrowser" ofType:@"bundle"];
+    NSBundle *privateBundle = [NSBundle bundleWithPath:privateBundlePath];
+    TTPLog(@"%@", privateBundle);
+    NSString *indexPath = [privateBundle pathForResource:@"index" ofType:@"html" inDirectory:@"tianmaomofang"];
+    TTPLog(@"%@", indexPath);
+    TTPWKWebViewController *wkWebBrowser = [[TTPWKWebViewController alloc]initWithURL:[NSURL fileURLWithPath:indexPath]];
+    [self.navigationController pushViewController:wkWebBrowser animated:YES];
 }
 
 - (void)didReceiveMemoryWarning {

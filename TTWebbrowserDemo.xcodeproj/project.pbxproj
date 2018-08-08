@@ -8,13 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B431253D2101DD80008F1BD8 /* TTPReloadView.m in Sources */ = {isa = PBXBuildFile; fileRef = B431253C2101DD80008F1BD8 /* TTPReloadView.m */; };
-		B43A9FCD2109C9C0000DD116 /* more.png in Resources */ = {isa = PBXBuildFile; fileRef = B43A9FCA2109C9C0000DD116 /* more.png */; };
-		B43A9FCE2109C9C0000DD116 /* more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43A9FCB2109C9C0000DD116 /* more@2x.png */; };
-		B43A9FCF2109C9C0000DD116 /* more@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B43A9FCC2109C9C0000DD116 /* more@3x.png */; };
 		B450F03F20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */; };
 		B4593FDE211046AF001D39C4 /* TTPNaviTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = B4593FDD211046AF001D39C4 /* TTPNaviTitleView.m */; };
+		B461AFCA2119A3AA00C28E31 /* TTPWebBrowserAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B461AFC92119A3AA00C28E31 /* TTPWebBrowserAssets.xcassets */; };
 		B46A8C8420F6FB18009ABFFC /* TTPWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */; };
-		B46F16662106DA9D00506D72 /* update-arrows.png in Resources */ = {isa = PBXBuildFile; fileRef = B46F16652106DA9D00506D72 /* update-arrows.png */; };
 		B497D17D20EF1AC000A049E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D17C20EF1AC000A049E8 /* AppDelegate.m */; };
 		B497D18020EF1AC000A049E8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B497D17F20EF1AC000A049E8 /* ViewController.m */; };
 		B497D18520EF1AC000A049E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B497D18420EF1AC000A049E8 /* Assets.xcassets */; };
@@ -49,16 +46,13 @@
 		B415031220FC4D65007B9728 /* TTPMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPMacros.h; sourceTree = "<group>"; };
 		B431253B2101DD80008F1BD8 /* TTPReloadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPReloadView.h; sourceTree = "<group>"; };
 		B431253C2101DD80008F1BD8 /* TTPReloadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPReloadView.m; sourceTree = "<group>"; };
-		B43A9FCA2109C9C0000DD116 /* more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = more.png; sourceTree = "<group>"; };
-		B43A9FCB2109C9C0000DD116 /* more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more@2x.png"; sourceTree = "<group>"; };
-		B43A9FCC2109C9C0000DD116 /* more@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "more@3x.png"; sourceTree = "<group>"; };
 		B450F03D20F60F24002F073E /* UIViewController+NavigationBackActionHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+NavigationBackActionHandler.h"; sourceTree = "<group>"; };
 		B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+NavigationBackActionHandler.m"; sourceTree = "<group>"; };
 		B4593FDC211046AF001D39C4 /* TTPNaviTitleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPNaviTitleView.h; sourceTree = "<group>"; };
 		B4593FDD211046AF001D39C4 /* TTPNaviTitleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPNaviTitleView.m; sourceTree = "<group>"; };
+		B461AFC92119A3AA00C28E31 /* TTPWebBrowserAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = TTPWebBrowserAssets.xcassets; sourceTree = "<group>"; };
 		B46A8C8220F6FB18009ABFFC /* TTPWebViewProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTPWebViewProgressView.h; sourceTree = "<group>"; };
 		B46A8C8320F6FB18009ABFFC /* TTPWebViewProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTPWebViewProgressView.m; sourceTree = "<group>"; };
-		B46F16652106DA9D00506D72 /* update-arrows.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "update-arrows.png"; sourceTree = "<group>"; };
 		B497D17820EF1AC000A049E8 /* TTWebbrowserDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TTWebbrowserDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B497D17B20EF1AC000A049E8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B497D17C20EF1AC000A049E8 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -119,14 +113,14 @@
 			path = TTPReloadView;
 			sourceTree = "<group>";
 		};
-		B450F03C20F60EE6002F073E /* Tools */ = {
+		B450F03C20F60EE6002F073E /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				B450F03D20F60F24002F073E /* UIViewController+NavigationBackActionHandler.h */,
 				B450F03E20F60F24002F073E /* UIViewController+NavigationBackActionHandler.m */,
 				B415031220FC4D65007B9728 /* TTPMacros.h */,
 			);
-			path = Tools;
+			path = Util;
 			sourceTree = "<group>";
 		};
 		B4593FDB21104686001D39C4 /* TTPNaviTitleView */ = {
@@ -141,10 +135,7 @@
 		B45DA02920F45BBA0067E65D /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				B43A9FCA2109C9C0000DD116 /* more.png */,
-				B43A9FCB2109C9C0000DD116 /* more@2x.png */,
-				B43A9FCC2109C9C0000DD116 /* more@3x.png */,
-				B46F16652106DA9D00506D72 /* update-arrows.png */,
+				B461AFC92119A3AA00C28E31 /* TTPWebBrowserAssets.xcassets */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -173,6 +164,7 @@
 		B497D17A20EF1AC000A049E8 /* TTWebbrowserDemo */ = {
 			isa = PBXGroup;
 			children = (
+				B497D1AE20EF1B0000A049E8 /* Base */,
 				B497D1AD20EF1AF700A049E8 /* TTPWebbrowser */,
 				B497D17B20EF1AC000A049E8 /* AppDelegate.h */,
 				B497D17C20EF1AC000A049E8 /* AppDelegate.m */,
@@ -206,11 +198,10 @@
 		B497D1AD20EF1AF700A049E8 /* TTPWebbrowser */ = {
 			isa = PBXGroup;
 			children = (
-				B450F03C20F60EE6002F073E /* Tools */,
+				B450F03C20F60EE6002F073E /* Util */,
 				B45DA02920F45BBA0067E65D /* resources */,
 				B497D1BD20EF219800A049E8 /* Navi */,
 				B497D1B020EF1B0E00A049E8 /* Main */,
-				B497D1AE20EF1B0000A049E8 /* Base */,
 			);
 			path = TTPWebbrowser;
 			sourceTree = "<group>";
@@ -370,11 +361,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B43A9FCF2109C9C0000DD116 /* more@3x.png in Resources */,
-				B46F16662106DA9D00506D72 /* update-arrows.png in Resources */,
-				B43A9FCD2109C9C0000DD116 /* more.png in Resources */,
+				B461AFCA2119A3AA00C28E31 /* TTPWebBrowserAssets.xcassets in Resources */,
 				B497D18520EF1AC000A049E8 /* Assets.xcassets in Resources */,
-				B43A9FCE2109C9C0000DD116 /* more@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

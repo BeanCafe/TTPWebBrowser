@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "TTPWKWebViewController.h"
+
 @interface TTPWebbrowser : NSObject
 
 @property (copy, nonatomic)NSString *url;
